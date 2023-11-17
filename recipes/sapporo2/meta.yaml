@@ -1,0 +1,54 @@
+{% set name = "sapporo2" %}
+{% set version = "0.0.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/LourensVeen/sapporo2/archive/refs/heads/work.tar.gz
+  sha256: 6bda1f1467c9895129821e313a62f4bf03e40380b8bf78c060111fc8455d0733
+
+build:
+  number: 0
+  string: cuda{{ cuda_compiler_version | replace('.', '') }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
+  string: opencl_{{ PKG_BUILDNUM }}    # [cuda_compiler_version == "None"]
+
+  skip: true                      # [win or osx64]
+
+  script_env:
+    - BACKEND=CUDA                # [cuda_compiler_version != "None"]
+    - BACKEND=OpenCL              # [cuda_compiler_version == "None"]
+  script: make install
+
+  missing_dso_whitelist:
+    - "*/libcuda.so*"            # [cuda_compiler_version != "None"]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - {{ compiler('cuda') }}      # [cuda_compiler_version != "None"]
+    - git
+    - git-lfs
+    - make
+    - pocl                        # [cuda_compiler_version == "None"]
+    - vim
+    # - conda-verify
+
+  host:
+    - ocl-icd                     # [cuda_compiler_version == "None"]
+
+  run:
+    - __cuda
+    - libgcc-ng
+    - libstdcxx-ng
+    - _openmp_mutex
+
+test:
+
+about:
+  home: https://github.com/treecode/sapporo2
+  summary: Library for emulating GRAPE6 n-body calculations
+  license: GPL-3.0-only
+  license_family: GPL
+  license_file: LICENSE
