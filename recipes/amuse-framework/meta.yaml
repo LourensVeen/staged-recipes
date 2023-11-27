@@ -1,0 +1,59 @@
+{% set name = "amuse-framework" %}
+{% set version = "2023.11.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/amusecode/amuse.git
+  git_rev: v2023.11.0
+  git_depth: 1
+
+build:
+  number: 0
+  string: {{ mpi }}_{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+
+  skip: true                      # [win]
+
+  script: cd packages/amuse-framework && ./configure && ${PYTHON} setup.py sdist && ${PYTHON} -m pip install dist/*.tar.gz
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - git
+    - git-lfs
+    - make
+    - cmake
+    # - conda-verify
+
+  host:
+    - {{ mpi }}
+    - python
+    - setuptools
+    - setuptools_scm
+    - pip
+    - wheel
+    - pytest
+    - docutils
+    - mpi4py
+    - h5py
+    - matplotlib
+
+  run:
+    - libgcc-ng
+    - libstdcxx-ng
+    - libgfortran5
+    - python
+    - mpi4py
+    - h5py
+
+test:
+
+about:
+  home: https://github.com/amusecode/amuse
+  summary: Astrophysical Multipurpose Software Environment - Framework
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
