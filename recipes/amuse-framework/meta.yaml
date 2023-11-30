@@ -9,14 +9,14 @@ source:
   git_url: https://github.com/amusecode/amuse.git
   git_rev: v2023.11.0
   git_depth: 1
+  patches:
+    - patches/simple_hash_no_test.patch
 
 build:
   number: 0
   string: {{ mpi }}_{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
 
   skip: true                      # [win]
-
-  script: cd packages/amuse-framework && ./configure && ${PYTHON} setup.py sdist && ${PYTHON} -m pip install dist/*.tar.gz
 
 requirements:
   build:
@@ -26,6 +26,10 @@ requirements:
     - git-lfs
     - make
     - cmake
+    - python                                # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}    # [build_platform != target_platform]
+    - numpy                                 # [build_platform != target_platform]
+    - gnuconfig                             # [unix]
     # - conda-verify
 
   host:
@@ -39,13 +43,15 @@ requirements:
     - docutils
     - mpi4py
     - h5py
+    - numpy
     - matplotlib
 
   run:
-    - libgcc-ng
-    - libstdcxx-ng
-    - libgfortran5
+    - libgcc-ng                 # [linux]
+    - libstdcxx-ng              # [linux]
+    - libgfortran5              # [linux]
     - python
+    - numpy
     - mpi4py
     - h5py
 

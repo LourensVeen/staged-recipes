@@ -1,0 +1,13 @@
+diff --git a/lib/simple_hash/Makefile b/lib/simple_hash/Makefile
+index b3d0cb2dc..3a60cf0af 100644
+--- a/lib/simple_hash/Makefile
++++ b/lib/simple_hash/Makefile
+@@ -10,7 +10,7 @@ STATIC_LIBNAME = libsimple_hash.a
+ 
+ OBJS = simple_hash.o
+ 
+-all: test_hash test $(LIBNAME) $(STATIC_LIBNAME)
++all: $(LIBNAME) $(STATIC_LIBNAME)
+ 
+ CFLAGS += -std=c99 -O2 -fPIC
+ 
