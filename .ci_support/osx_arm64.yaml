@@ -1,0 +1,23 @@
+c_compiler:
+  - clang
+c_compiler_version:
+  - 16
+cxx_compiler:
+  - clangxx
+cxx_compiler_version:
+  - 16
+llvm_openmp:
+  - 16
+fortran_compiler:
+  - gfortran
+fortran_compiler_version:
+  - 12
+target_platform:
+  - osx-arm64
+arm_variant_type:
+  - sbsa
+channel_sources:
+  - conda-forge
+_libgcc_mutex:
+  - 0.1 conda_forge
+
