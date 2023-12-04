@@ -1,0 +1,14 @@
+diff --git a/src/amuse/community/ph4/Makefile b/src/amuse/community/ph4/Makefile
+index 35eddca24..575820840 100644
+--- a/src/amuse/community/ph4/Makefile
++++ b/src/amuse/community/ph4/Makefile
+@@ -21,8 +21,7 @@ LDFLAGS  += -L$(AMUSE_DIR)/lib/stopcond -lstopcond -lm $(MUSE_LD_FLAGS)
+ 
+ CUDA_TK  ?= /usr/local/cuda
+ 
+-SAPPORO_LIBDIRS ?= -L$(AMUSE_DIR)/lib/sapporo_light
+-SAPPORO_LIBS ?= $(SAPPORO_LIBDIRS) -lsapporo
++SAPPORO_LIBS = -lsapporoG6
+ 
+ # Boost is needed by sapporo.
+ 

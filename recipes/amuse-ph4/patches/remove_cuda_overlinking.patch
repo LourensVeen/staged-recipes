@@ -1,0 +1,12 @@
+diff --git a/src/amuse/community/ph4/Makefile b/src/amuse/community/ph4/Makefile
+index 35eddca24..31c160a24 100644
+--- a/src/amuse/community/ph4/Makefile
++++ b/src/amuse/community/ph4/Makefile
+@@ -33,7 +33,6 @@ CUDA_LIBS ?= $(CUDA_LIBDIRS) -lcudart
+ 
+ LDFLAGS_GPU =	$(LDFLAGS) \
+ 		$(SAPPORO_LIBS) \
+-		$(CUDA_LIBS) \
+ 		$(BOOSTLIBS)
+ 
+ OBJS = interface.o

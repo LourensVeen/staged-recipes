@@ -1,0 +1,65 @@
+{% set name = "amuse-ph4" %}
+{% set version = "2023.11.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/amusecode/amuse.git
+  git_rev: v2023.11.0
+  git_depth: 1
+  patches:
+    - patches/remove_cuda_overlinking.patch
+    - patches/sapporo_libname.patch
+
+build:
+  number: 0
+  string: {{ mpi }}_{{ backend }}_{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+
+  skip: true                      # [win]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - git
+    - git-lfs
+    - make
+    - cmake
+    - python                                # [build_platform != target_platform]
+    - cross-python_{{ target_platform }}    # [build_platform != target_platform]
+    - numpy                                 # [build_platform != target_platform]
+    - gnuconfig                             # [unix]
+    # - conda-verify
+
+  host:
+    - {{ mpi }}
+    - python
+    - setuptools
+    - setuptools_scm
+    - pip
+    - wheel
+    - pytest
+    - docutils
+    - amuse-framework
+    - sapporo2                              # [backend == 'sapporo']
+
+  run:
+    - libgcc-ng                 # [linux]
+    - libstdcxx-ng              # [linux]
+    - libgfortran5              # [linux]
+    - python
+    - numpy
+    - mpi4py
+    - amuse-framework
+    - sapporo2                              # [backend == 'sapporo']
+
+test:
+
+about:
+  home: https://github.com/amusecode/amuse
+  summary: Astrophysical Multipurpose Software Environment - ph4
+  license: Apache-2.0
+  license_family: APACHE
+  license_file: LICENSE
