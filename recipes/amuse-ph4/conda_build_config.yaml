@@ -1,7 +1,0 @@
-mpi:
-  - mpich
-  - openmpi
-
-backend:
-  - cpu
-  - sapporo

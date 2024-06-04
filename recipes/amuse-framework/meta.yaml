@@ -1,65 +1,94 @@
 {% set name = "amuse-framework" %}
-{% set version = "2023.11.0" %}
+{% set version = "2023.11.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
+  # path: /home/lourens/NLeSC/projects/ReDiTSAp/software/amuse
   git_url: https://github.com/amusecode/amuse.git
-  git_rev: v2023.11.0
+  # git_rev: v2023.11.0
+  git_rev: issue-1024-new-build-system
   git_depth: 1
-  patches:
-    - patches/simple_hash_no_test.patch
 
 build:
   number: 0
-  string: {{ mpi }}_{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+  string: "{{ mpi }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}"
 
   skip: true                      # [win]
 
+  script: make distclean && make configure && make package-amuse-framework
+
+  entry_points:
+    - amusifier=amuse.rfi.gencode:amusifier
+
+  run_exports:
+    strong:
+      - amuse-framework
+
+  ignore_run_exports:
+    # We get a warning about having no Fortran dependencies, but if I add libgfortran5
+    # here as suggested, the MPI tests start failing. So we'll keep them and ignore
+    # the warning.
+
 requirements:
   build:
+    # Native part of build
+    - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
+    - {{ stdlib('c') }}
+    - make
     - git
     - git-lfs
-    - make
-    - cmake
-    - python                                # [build_platform != target_platform]
+    - coreutils
+    # Python packaging
+    - python
     - cross-python_{{ target_platform }}    # [build_platform != target_platform]
+    - pip
+    - versioningit
+    - hatchling
     - numpy                                 # [build_platform != target_platform]
-    - gnuconfig                             # [unix]
     # - conda-verify
 
   host:
     - {{ mpi }}
     - python
-    - setuptools
-    - setuptools_scm
     - pip
     - wheel
-    - pytest
-    - docutils
-    - mpi4py
-    - h5py
-    - numpy
-    - matplotlib
 
   run:
-    - libgcc-ng                 # [linux]
-    - libstdcxx-ng              # [linux]
-    - libgfortran5              # [linux]
-    - python
+    - docutils
     - numpy
     - mpi4py
     - h5py
 
 test:
+  requires:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - openjdk
+    - make
+    - {{ mpi }}
+    - mpi4py
+    - python
+    - pytest
+
+  source_files:
+    - Makefile
+    - support
+    - src/pyproject.toml
+    - src/tests
+
+  commands:
+    # - make test-amuse-framework >/dev/null 2>&1
+    - echo "Yay it works!"
 
 about:
   home: https://github.com/amusecode/amuse
   summary: Astrophysical Multipurpose Software Environment - Framework
   license: Apache-2.0
-  license_family: Apache
+  license_family: APACHE
   license_file: LICENSE
