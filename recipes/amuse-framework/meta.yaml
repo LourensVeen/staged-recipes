@@ -49,7 +49,7 @@ requirements:
     - pip
     - versioningit
     - hatchling
-    - numpy                                 # [build_platform != target_platform]
+    - numpy<2                               # [build_platform != target_platform]
     # - conda-verify
 
   host:
@@ -60,7 +60,7 @@ requirements:
 
   run:
     - docutils
-    - numpy
+    - numpy<2
     - mpi4py
     - h5py
 
