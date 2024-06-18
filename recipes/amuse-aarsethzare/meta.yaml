@@ -1,0 +1,72 @@
+{% set name = "amuse-aarsethzare" %}
+{% set version = "2023.11.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  git_url: https://github.com/amusecode/amuse.git
+  git_rev: issue-1024-new-build-system
+  git_depth: 1
+
+build:
+  number: 0
+  string: "{{ mpi }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}"
+
+  skip: true                      # [win]
+
+  script: make package-amuse-aarsethzare
+
+requirements:
+  build:
+    # Native part of build
+    - {{ compiler('fortran') }}
+    - {{ stdlib('c') }}
+    - {{ mpi }}                             # [build_platform == target_platform]
+    - make
+    - git
+    - git-lfs
+    - coreutils
+    - amuse-framework
+    # Python packaging
+    - python
+    - cross-python_{{ target_platform }}    # [build_platform != target_platform]
+    - pip
+    - versioningit
+    - hatchling
+    - numpy<2                               # [build_platform != target_platform]
+    # - conda-verify
+
+  host:
+    - amuse-framework
+    - {{ mpi }}
+    - python
+    - pip
+    - wheel
+
+test:
+  requires:
+    - {{ compiler('fortran') }}
+    - make
+    - {{ mpi }}
+    - mpi4py
+    - python
+    - pytest
+
+  source_files:
+    - Makefile
+    - support
+    - src/amuse/community/aarsethzare
+    - src/tests/amusetest.py
+
+  commands:
+    - make test-amuse-aarsethzare
+    # - echo "Yay it works!"
+
+about:
+  home: https://github.com/amusecode/amuse
+  summary: Astrophysical Multipurpose Software Environment - AarsethZare
+  license: Apache-2.0
+  license_family: APACHE
+  license_file: LICENSE

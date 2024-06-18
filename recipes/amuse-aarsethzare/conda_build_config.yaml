@@ -1,0 +1,12 @@
+# Temporary work-around for https://github.com/conda-forge/openmpi-feedstock/issues/143
+# We don't need glibc 2.17 ourselves.
+c_stdlib:
+  - sysroot                   # [linux]
+  - macos_deployment_target   # [osx]
+
+c_stdlib_version:             # [linux]
+  - 2.17                      # [linux]
+
+mpi:
+  - mpich
+  - openmpi
