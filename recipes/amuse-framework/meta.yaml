@@ -36,8 +36,6 @@ requirements:
   build:
     # Native part of build
     - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
     - {{ stdlib('c') }}
     - make
     - git
